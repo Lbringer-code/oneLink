@@ -1,0 +1,4 @@
+package: domain
+output: types.gen.go
+generate:
+  models: true
