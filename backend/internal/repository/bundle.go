@@ -1,6 +1,8 @@
 package repository
 
 import (
+	"time"
+
 	"github.com/Lbringer-code/oneLink/backend/internal/domain"
 )
 
@@ -24,7 +26,7 @@ func (r *Repository) CreateBundleWithLinks(bundle domain.BundleDB , links []doma
 	for _ , link := range links {
 		_ , err = tx.NamedExec(
 			`INSERT INTO link ( bundle_slug , url , note , display_text , created_at )
-			VALUES ( :bundle_slug , :url , :note , :display_text )` , 
+			VALUES ( :bundle_slug , :url , :note , :display_text , :created_at)` , 
 			link,
 		)
 		if err != nil{
@@ -35,7 +37,7 @@ func (r *Repository) CreateBundleWithLinks(bundle domain.BundleDB , links []doma
 	return tx.Commit()
 }
 
-func (r *Repository) GetBundleWithLinks(slug string) (*domain.BundleDB , *[]domain.LinkDB , error ){
+func (r *Repository) GetBundleWithLinks(slug string) (*domain.BundleDB , []domain.LinkDB , error ){
 	var bundle domain.BundleDB
 	err := r.db.Get(
 		&bundle ,
@@ -58,5 +60,34 @@ func (r *Repository) GetBundleWithLinks(slug string) (*domain.BundleDB , *[]doma
 		return nil , nil , err
 	}
 
-	return &bundle , &links , nil
+	return &bundle , links , nil
 }
+
+func (r *Repository) UpdateLastAccessed(slug string , t time.Time) (error){
+	_ , err := r.db.Exec(
+		`UPDATE bundle
+		SET last_accessed = $2
+		WHERE slug = $1` ,
+		slug ,
+		t,
+	)
+	return err
+}
+
+func (r *Repository) DeleteStaleBundles(maxAge time.Duration) (int64 , error) {
+	result , err := r.db.Exec(
+		`DELETE FROM bundle WHERE last_accessed < NOW() - $1::INTERVAL`  ,
+		maxAge ,
+	)
+	if err != nil {
+		return 0 , err
+	}
+
+	count , err := result.RowsAffected()
+	if err != nil {
+		return 0 , err
+	}
+
+	return count , nil
+}
+
