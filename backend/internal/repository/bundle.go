@@ -74,9 +74,9 @@ func (r *Repository) UpdateLastAccessed(slug string , t time.Time) (error){
 	return err
 }
 
-func (r *Repository) DeleteStaleBundles(maxAge time.Duration) (int64 , error) {
+func (r *Repository) DeleteStaleBundles(maxAge time.Time) (int64 , error) {
 	result , err := r.db.Exec(
-		`DELETE FROM bundle WHERE last_accessed < NOW() - $1::INTERVAL`  ,
+		`DELETE FROM bundle WHERE last_accessed < $1` ,
 		maxAge ,
 	)
 	if err != nil {
