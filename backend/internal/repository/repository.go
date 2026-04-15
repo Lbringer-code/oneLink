@@ -7,6 +7,9 @@ type Repository struct {
 }
 
 func New(db *sqlx.DB) *Repository{
-	return &Repository{ db : db }
+	return &Repository{ 
+		db : db ,
+	}
+
 }
 
