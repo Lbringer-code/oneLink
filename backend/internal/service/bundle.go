@@ -72,7 +72,14 @@ func (s *Service) GetBundle( slug string) ( *domain.GetBundleResponse , error ) 
 		return nil , errors.Join( ErrInternal , err )
 	}
 
-	_ = s.repo.UpdateLastAccessed( slug , time.Now() )
+	err = s.repo.UpdateLastAccessed( slug , time.Now() )
+	if err != nil {
+		s.logger.Warn(
+			"failed to update last accessed" ,
+			"slug" , slug ,
+			"error" , err ,
+		)
+	}
 
 	apiLinks := make([]domain.Link , len(links))
 	for i , l := range links {
