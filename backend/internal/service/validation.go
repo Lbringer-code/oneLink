@@ -26,7 +26,7 @@ func validateCreateRequest(req domain.CreateBundleRequest) error {
 	}
 
 	if len(req.Links) == 0 {
-		return fmt.Errorf("atleast one link is required")
+		return fmt.Errorf("at least one link is required")
 	}
 	if len(req.Links) > maxLinks {
 		return fmt.Errorf("number of links cannot exceed %d links per bundle" , maxLinks)

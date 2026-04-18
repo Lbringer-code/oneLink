@@ -75,7 +75,7 @@ func (s *Service) GetBundle( slug string) ( *domain.GetBundleResponse , error ) 
 	_ = s.repo.UpdateLastAccessed( slug , time.Now() )
 
 	apiLinks := make([]domain.Link , len(links))
-	for i , l := range apiLinks {
+	for i , l := range links {
 		apiLinks[i] = domain.Link{
 			DisplayText: l.DisplayText,
 			Note: l.Note,
