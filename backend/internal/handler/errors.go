@@ -20,6 +20,7 @@ func (h *Handler) writeJSON( w http.ResponseWriter , status int ,  data any) {
 	if err != nil {
 		h.logger.Error("failed to marshal response" , "error" , err)
 		http.Error( w , "something went wrong" , http.StatusInternalServerError )
+		return
 	}
 
 	w.Header().Set("Content-type" , "application/json")
@@ -29,8 +30,8 @@ func (h *Handler) writeJSON( w http.ResponseWriter , status int ,  data any) {
 
 func (h *Handler) writeError( w http.ResponseWriter , err error ) {
 	status := http.StatusInternalServerError
-	for sentinal , code := range errorStatusMap {
-		if errors.Is(err , sentinal) {
+	for sentinel , code := range errorStatusMap {
+		if errors.Is(err , sentinel) {
 			status = code
 			break
 		}

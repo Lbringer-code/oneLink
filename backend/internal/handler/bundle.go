@@ -34,6 +34,7 @@ func (h *Handler) GetBundle( w http.ResponseWriter , r *http.Request ) {
 	resp , err := h.svc.GetBundle(slug)
 	if err != nil {
 		h.writeError(w , err)
+		return
 	}
 
 	h.writeJSON(w , http.StatusOK , resp)
