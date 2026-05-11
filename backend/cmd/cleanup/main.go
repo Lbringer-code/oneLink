@@ -1,4 +1,4 @@
-package cleanup
+package main
 
 import (
 	"log/slog"
@@ -29,6 +29,7 @@ func main() {
 		logger.Error("db connect failed" , "error" , err)
 		os.Exit(1)
 	}
+	defer database.Close()
 
 	repo := repository.New(database)
 	svc := service.New(repo , logger)
@@ -42,5 +43,5 @@ func main() {
 		os.Exit(1)
 	}
 
-	logger.Info("cleaup completed" , "deleted_count" , count)
+	logger.Info("cleanup completed" , "deleted_count" , count)
 }

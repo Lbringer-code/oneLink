@@ -43,7 +43,7 @@ func main() {
 		logger.Error("migrations failed to run" , "error" , err)
 		os.Exit(1)
 	}
-	logger.Info("migrations failed to run")
+	logger.Info("migrations applied")
 
 	repo := repository.New(database)
 	svc := service.New(repo , logger)
@@ -73,7 +73,7 @@ func main() {
 		logger.Error("server error" , "error" , err)
 		os.Exit(1)
 	case sig := <- quit:
-		logger.Info("shutdown signal recieved" , "signal" , sig.String())
+		logger.Info("shutdown signal received" , "signal" , sig.String())
 	}
 
 	shutdownCtx , cancel := context.WithTimeout(context.Background() , 15 * time.Second)

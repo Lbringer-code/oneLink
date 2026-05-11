@@ -23,7 +23,7 @@ func (h *Handler) writeJSON( w http.ResponseWriter , status int ,  data any) {
 		return
 	}
 
-	w.Header().Set("Content-type" , "application/json")
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(status)
 	w.Write(body)
 }

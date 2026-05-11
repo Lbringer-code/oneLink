@@ -14,7 +14,7 @@ import (
 const createMigrationsTable = `
 CREATE TABLE IF NOT EXISTS schema_migrations (
 	filename TEXT PRIMARY KEY ,
-	applied_at TIMESTAMPZ NOT NULL DEFAULT NOW()
+	applied_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 )`
 
 func RunMigrations( db *sqlx.DB , migrationsDir string , logger *slog.Logger ) error {
